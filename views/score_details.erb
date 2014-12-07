@@ -1,0 +1,47 @@
+<div class="row">
+  <div class="row">
+    <h1 class="text-center"><%= @score_name %></h1>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-10 col-md-offset-1" id="metric_histogram">
+
+  </div>
+  <script src="/js/histogram.js"></script>
+</div>
+
+<div class="row">
+  <table class="table table-striped">
+    <tr>
+      <th>Node</th>
+      <th class="col-md-4">Value</th>
+      <th>Normalized Value</th>
+      
+    </tr>
+    <% @nodes.each do |node, data| 
+      name = data[:id]
+      absolute = data[:absolute].to_f
+      color_class = data[:color_class]
+    %>
+      <tr>
+        <td><a href="/node/<%= node %>/">Node <%= node %></a></td>
+        <td>
+          <div class="metric_bar">
+          <div class="progress">
+            <div class="progress-bar progress-bar-<%= color_class %>" role="progressbar" aria-valuenow="<%= absolute*100 %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= absolute*100 %>%;">
+              <span class="sr-only"><%= absolute*100 %>%</span>
+            </div>
+          </div>
+          </div>
+        </td>  
+        <td><span class="text-<%= color_class %>"><%= (absolute*100).round(2) %>%</span></td>
+      </tr>
+    <% end %>
+  </table>
+</div>
+
+<div class="row">
+    <%= will_paginate @nodes %>
+  </div>
+</div>
